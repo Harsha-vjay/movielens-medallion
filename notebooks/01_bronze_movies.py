@@ -11,8 +11,16 @@
 
 # COMMAND ----------
 
+import uuid
+from datetime import datetime, timezone
+
 from pyspark.sql import functions as F
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+
+# Serverless compute (Free Edition) forbids spark.sparkContext access, so we
+# derive a per-notebook-run id in plain Python and pass it via F.lit(...).
+RUN_ID = f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}-{uuid.uuid4().hex[:8]}"
+print("This run's _ingest_run_id =", RUN_ID)
 
 # COMMAND ----------
 
@@ -69,7 +77,7 @@ df_bronze_movies = (
     df_movies_raw
         .withColumn("_ingest_ts",      F.current_timestamp())
         .withColumn("_source_file",    F.lit(MOVIES_PATH))
-        .withColumn("_ingest_run_id",  F.lit(spark.sparkContext.applicationId))
+        .withColumn("_ingest_run_id",  F.lit(RUN_ID))
 )
 
 # COMMAND ----------
