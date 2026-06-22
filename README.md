@@ -178,3 +178,7 @@ See [`screenshots/README.md`](screenshots/README.md).
 - Bronze movies, silver, and gold writes use `mode("overwrite")` with `overwriteSchema=true`.
 - Bronze ratings uses Auto Loader **append** with a persistent checkpoint, so re-running `02` is a no-op unless new files have landed.
 - Every notebook can be re-run end-to-end at any time.
+
+---
+
+- The dashboard cannot be shared directly because the project runs on Databricks Free Edition (single-user workspace, no external sharing). Its content is delivered as MovieLens_Dashboard_before.pdf + MovieLens_Dashboard_after.pdf.
