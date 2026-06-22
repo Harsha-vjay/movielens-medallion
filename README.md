@@ -1,6 +1,6 @@
-# MovieLens Medallion - Databricks Free Edition
+# MovieLens Medallion - A Databricks Project
 
-End-to-end Bronze / Silver / Gold pipeline on **Databricks Free Edition** (serverless, Unity Catalog) using the **MovieLens ml-latest-small** dataset.
+An End-to-end Bronze / Silver / Gold (Medallion Architecture) pipeline on **Databricks** (serverless, Unity Catalog) using the **MovieLens ml-latest-small** dataset.
 
 Two diverse sources are deliberately combined:
 
@@ -37,12 +37,12 @@ Both business objectives below are computed by **joining the two sources**.
    silver_ratings (typed, deduped, filtered)               │
                    │                                       │
                    ▼                                       │
-              GOLD (ratings ⋈ movies)                      │
+              GOLD (ratings & movies)                      │
    gold_genre_trends      ← Objective 1                    │
    gold_trending_movies   ← Objective 2                    │
                    │                                       │
                    ▼                                       │
-          AI/BI Dashboard ◀───────────────────────────────┘
+          AI/BI Dashboard  ◀───────────────────────────────┘
                 refreshed after each increment is dropped
 ```
 
@@ -52,8 +52,8 @@ Both business objectives below are computed by **joining the two sources**.
 
 | Objective                                                         | Gold table            | Sources joined                              |
 |-------------------------------------------------------------------|-----------------------|---------------------------------------------|
-| **Genre engagement over time** (avg rating + rating count per genre per month) | `gold_genre_trends`   | `silver_ratings` ⋈ `silver_movies` (exploded genres) |
-| **Trending titles per month** (top-20 movies by rating count, then avg rating) | `gold_trending_movies`| `silver_ratings` ⋈ `silver_movies`          |
+| **Genre engagement over time** (avg rating + rating count per genre per month) | `gold_genre_trends`   | `silver_ratings` & `silver_movies` (exploded genres) |
+| **Trending titles per month** (top-20 movies by rating count, then avg rating) | `gold_trending_movies`| `silver_ratings` & `silver_movies`          |
 
 Neither objective can be answered from a single source - that is the point.
 
