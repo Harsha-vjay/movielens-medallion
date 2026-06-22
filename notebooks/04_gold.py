@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # 04 — Gold (business objectives)
+# MAGIC # 04 - Gold (business objectives)
 # MAGIC
 # MAGIC Both objectives **join the two diverse sources** via the silver layer:
 # MAGIC `silver_ratings` (streamed) × `silver_movies` (batch dimension, genre exploded).
@@ -37,11 +37,11 @@ GOLD_TRENDING_MOVIES    = f"{SCHEMA_FQN}.gold_trending_movies"
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Objective 1 — gold_genre_trends
+# MAGIC ## Objective 1 - gold_genre_trends
 # MAGIC
 # MAGIC Per `(genre, event_month)`:
-# MAGIC - `rating_count` — total number of ratings.
-# MAGIC - `avg_rating`   — average rating (rounded to 3 dp).
+# MAGIC - `rating_count` - total number of ratings.
+# MAGIC - `avg_rating`   - average rating (rounded to 3 dp).
 # MAGIC
 # MAGIC Joins `silver_ratings` with the **exploded** `silver_movies`, so a film
 # MAGIC tagged with 3 genres contributes a rating to all 3 genre-buckets.
@@ -85,7 +85,7 @@ display(spark.sql(f"""
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Objective 2 — gold_trending_movies
+# MAGIC ## Objective 2 - gold_trending_movies
 # MAGIC
 # MAGIC Per `event_month`, rank movies by `rating_count` (desc), then `avg_rating`
 # MAGIC (desc) as a tiebreaker, and keep the top 20 per month with their `rank`.

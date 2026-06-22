@@ -94,7 +94,7 @@ stream_df = (
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Write the stream — `availableNow` trigger
+# MAGIC ## Write the stream - `availableNow` trigger
 # MAGIC
 # MAGIC `availableNow=True` is the modern replacement for `Trigger.Once`. It
 # MAGIC processes everything currently visible, in multiple micro-batches if
@@ -120,7 +120,7 @@ print("Auto Loader run finished.")
 
 # MAGIC %md
 # MAGIC ## How many rows did this run actually append?
-# MAGIC Reads the last progress entry from the query history — useful for the
+# MAGIC Reads the last progress entry from the query history, useful for the
 # MAGIC "before / after the increment" comparison.
 
 # COMMAND ----------

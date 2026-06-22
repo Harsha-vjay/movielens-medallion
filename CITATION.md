@@ -2,14 +2,14 @@
 
 ## Dataset
 
-**MovieLens ml-latest-small** — produced by the GroupLens research group at the University of Minnesota.
+**MovieLens ml-latest-small** - produced by the GroupLens research group at the University of Minnesota.
 
 Download URL: <https://files.grouplens.org/datasets/movielens/ml-latest-small.zip>
 
 The package used in this project contains, among other files:
 
-- `movies.csv` — columns: `movieId`, `title`, `genres` (pipe-separated)
-- `ratings.csv` — columns: `userId`, `movieId`, `rating` (0.5–5.0 in 0.5 steps), `timestamp` (Unix epoch seconds, UTC)
+- `movies.csv` - columns: `movieId`, `title`, `genres` (pipe-separated)
+- `ratings.csv` - columns: `userId`, `movieId`, `rating` (0.5–5.0 in 0.5 steps), `timestamp` (Unix epoch seconds, UTC)
 
 ## Required citation
 
@@ -38,6 +38,6 @@ The MovieLens datasets are released by GroupLens under their own usage terms. Fr
 - The data may be used for **research, education, and personal projects**.
 - The data **may not be redistributed without permission** from GroupLens, and downstream users must **preserve the attribution** above.
 
-For this reason the raw CSV files (and the zip) are **not** committed to this repository — see [`.gitignore`](.gitignore). Every notebook in this project loads the data from a Unity Catalog Volume that the grader populates manually following the [README runbook](README.md#6-runbook).
+For this reason the raw CSV files (and the zip) are **not** committed to this repository - see [`.gitignore`](.gitignore). Every notebook in this project loads the data from a Unity Catalog Volume that the grader populates manually following the [README runbook](README.md#6-runbook).
 
 Always refer to the official GroupLens page for the latest terms: <https://grouplens.org/datasets/movielens/>.

@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # 03 — Silver
+# MAGIC # 03 - Silver
 # MAGIC
 # MAGIC Cleans both bronze tables into analytics-ready silver tables.
 # MAGIC
@@ -10,7 +10,7 @@
 # MAGIC | `silver_ratings` | `bronze_ratings`  | cast Unix `timestamp` → `event_time` / `event_date` / `event_month`; filter rating to `[0.5, 5.0]`; drop nulls; dedupe on `(userId, movieId)` keeping the latest `event_time`. |
 # MAGIC
 # MAGIC Both writes use `overwrite` because silver is a deterministic re-derivation
-# MAGIC of bronze — idempotent and safe to re-run after each bronze update.
+# MAGIC of bronze, idempotent and safe to re-run after each bronze update.
 
 # COMMAND ----------
 
@@ -39,7 +39,7 @@ print("Writing:", SILVER_MOVIES_TABLE, "+", SILVER_RATINGS_TABLE)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 1. silver_movies — dedupe, explode genres, drop sentinel
+# MAGIC ## 1. silver_movies - dedupe, explode genres, drop sentinel
 # MAGIC
 # MAGIC MovieLens uses the literal string `(no genres listed)` when a film has no
 # MAGIC genres assigned. We drop those rows after the explode and log the count.
@@ -93,7 +93,7 @@ display(spark.sql(f"SELECT * FROM {SILVER_MOVIES_TABLE} LIMIT 10"))
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 2. silver_ratings — type, filter, dedupe
+# MAGIC ## 2. silver_ratings - type, filter, dedupe
 # MAGIC
 # MAGIC Steps:
 # MAGIC 1. Drop bronze metadata columns.
@@ -101,7 +101,7 @@ display(spark.sql(f"SELECT * FROM {SILVER_MOVIES_TABLE} LIMIT 10"))
 # MAGIC    derive `event_date` (date) and `event_month` (`YYYY-MM-01` date).
 # MAGIC 3. Filter `rating` to the valid MovieLens range `[0.5, 5.0]`.
 # MAGIC 4. Drop nulls on key columns.
-# MAGIC 5. Dedupe on `(userId, movieId)` — if a user rated the same movie twice,
+# MAGIC 5. Dedupe on `(userId, movieId)` - if a user rated the same movie twice,
 # MAGIC    keep the latest `event_time`.
 
 # COMMAND ----------

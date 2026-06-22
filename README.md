@@ -1,4 +1,4 @@
-# MovieLens Medallion — Databricks Free Edition
+# MovieLens Medallion - Databricks Free Edition
 
 End-to-end Bronze / Silver / Gold pipeline on **Databricks Free Edition** (serverless, Unity Catalog) using the **MovieLens ml-latest-small** dataset.
 
@@ -55,13 +55,13 @@ Both business objectives below are computed by **joining the two sources**.
 | **Genre engagement over time** (avg rating + rating count per genre per month) | `gold_genre_trends`   | `silver_ratings` ⋈ `silver_movies` (exploded genres) |
 | **Trending titles per month** (top-20 movies by rating count, then avg rating) | `gold_trending_movies`| `silver_ratings` ⋈ `silver_movies`          |
 
-Neither objective can be answered from a single source — that is the point.
+Neither objective can be answered from a single source - that is the point.
 
 ---
 
 ## 3. Dataset & citation
 
-- **MovieLens ml-latest-small** (GroupLens) — <https://files.grouplens.org/datasets/movielens/ml-latest-small.zip>
+- **MovieLens ml-latest-small** (GroupLens) - <https://files.grouplens.org/datasets/movielens/ml-latest-small.zip>
 - F. Maxwell Harper and Joseph A. Konstan. 2015. *The MovieLens Datasets: History and Context.* ACM Transactions on Interactive Intelligent Systems (TiiS) 5, 4: 19:1–19:19. DOI: <https://doi.org/10.1145/2827872>
 
 See [`CITATION.md`](CITATION.md) for the full reference and license note. The raw data files are **not** committed (see [`.gitignore`](.gitignore)).
@@ -77,16 +77,20 @@ movielens-medallion/
 ├── PROBLEMS.md               ← running problem log (rubric item)
 ├── PROMPTS.md                ← running AI-prompt log (rubric item)
 ├── .gitignore
+├── data/
+│   ├── increments/
+│   ├── initial/
+├── dashboard/
+│   ├── MovieLens - Genre & Trending Dashboard.lvdash.json
 ├── notebooks/
 │   ├── 00_setup.py
 │   ├── 01_bronze_movies.py
 │   ├── 02_bronze_ratings_stream.py
 │   ├── 03_silver.py
 │   ├── 04_gold.py
-│   └── 05_dashboard_queries.sql
 ├── scripts/
-│   └── split_ratings.py      ← LOCAL pandas script — builds initial + monthly increments
-└── screenshots/              ← submission screenshots (see screenshots/README.md)
+│   └── split_ratings.py      ← LOCAL pandas script - builds initial + monthly increments
+└── screenshots/              ← submission screenshots (screenshots/README.md)
 ```
 
 All notebooks are saved as Databricks **source** `.py` files (header `# Databricks notebook source`, cells separated by `# COMMAND ----------`), so they can be imported directly via *Workspace → Import → File*.
@@ -103,7 +107,7 @@ Each notebook starts with three `dbutils.widgets.text(...)` calls defaulting to:
 | `schema`  | `movielens` |
 | `volume`  | `raw`       |
 
-All Unity Catalog objects and Volume paths are built from those widgets, so the project can be relocated by changing the widget values — no code edits.
+All Unity Catalog objects and Volume paths are built from those widgets, so the project can be relocated by changing the widget values - no code edits.
 
 ---
 
@@ -151,19 +155,18 @@ All Unity Catalog objects and Volume paths are built from those widgets, so the 
 | `top_trending_movies`      | Table (or horizontal bar) | `gold_trending_movies` |
 | `monthly_ratings_volume`   | Bar (month × total ratings) | `silver_ratings`   |
 
-### 6.4 THE TEST — "add new data → dashboard changes"
+### 6.4 THE TEST - "add new data → dashboard changes"
 
 1. *Catalog Explorer*: upload `data/increments/ratings_inc_01.csv` into
    `/Volumes/workspace/movielens/raw/ratings/landing/`.
-2. Re-run `02_bronze_ratings_stream.py`. Auto Loader's checkpoint guarantees **only the new file** is consumed — the cell output will show the new row count.
+2. Re-run `02_bronze_ratings_stream.py`. Auto Loader's checkpoint guarantees **only the new file** is consumed - the cell output will show the new row count.
 3. Re-run `03_silver.py` and `04_gold.py`.
 4. Refresh the AI/BI dashboard.
 5. Expected: `genre_avg_rating_trend` extends with a new month, `top_trending_movies` shifts, `kpi_overview` counts grow.
-6. Take "before" and "after" screenshots (see checklist in `screenshots/README.md`).
 
 ---
 
-## 7. Screenshot checklist
+## 7. Screenshot list
 
 See [`screenshots/README.md`](screenshots/README.md).
 
