@@ -1,0 +1,743 @@
+{
+  "datasets": [
+    {
+      "name": "689a4b2f",
+      "displayName": "kpi_overview",
+      "queryLines": [
+        "SELECT\r\n",
+        "    (SELECT COUNT(*)                FROM workspace.movielens.silver_ratings) AS total_ratings,\r\n",
+        "    (SELECT COUNT(DISTINCT movieId) FROM workspace.movielens.silver_ratings) AS distinct_movies_rated,\r\n",
+        "    (SELECT COUNT(DISTINCT userId)  FROM workspace.movielens.silver_ratings) AS distinct_users,\r\n",
+        "    (SELECT ROUND(AVG(rating), 3)   FROM workspace.movielens.silver_ratings) AS overall_avg_rating;"
+      ]
+    },
+    {
+      "name": "16cf1601",
+      "displayName": "genre_avg_rating_trend",
+      "queryLines": [
+        "SELECT\r\n",
+        "    event_month,\r\n",
+        "    genre,\r\n",
+        "    avg_rating,\r\n",
+        "    rating_count\r\n",
+        "FROM workspace.movielens.gold_genre_trends\r\n",
+        "WHERE rating_count >= 20\r\n",
+        "ORDER BY event_month, genre;"
+      ]
+    },
+    {
+      "name": "10427ef7",
+      "displayName": "rating_count_by_genre",
+      "queryLines": [
+        "SELECT\r\n",
+        "    genre,\r\n",
+        "    SUM(rating_count) AS total_ratings,\r\n",
+        "    ROUND(SUM(rating_count * avg_rating) / SUM(rating_count), 3) AS weighted_avg_rating\r\n",
+        "FROM workspace.movielens.gold_genre_trends\r\n",
+        "GROUP BY genre\r\n",
+        "ORDER BY total_ratings DESC;"
+      ]
+    },
+    {
+      "name": "6b7a5296",
+      "displayName": "top_trending_movies",
+      "queryLines": [
+        "SELECT\r\n",
+        "    event_month,\r\n",
+        "    rank,\r\n",
+        "    title,\r\n",
+        "    rating_count,\r\n",
+        "    avg_rating\r\n",
+        "FROM workspace.movielens.gold_trending_movies\r\n",
+        "WHERE event_month = (SELECT MAX(event_month) FROM workspace.movielens.gold_trending_movies)\r\n",
+        "ORDER BY rank;"
+      ]
+    },
+    {
+      "name": "20a0b735",
+      "displayName": "monthly_ratings_volume",
+      "queryLines": [
+        "SELECT\r\n",
+        "    event_month,\r\n",
+        "    COUNT(*) AS ratings_in_month\r\n",
+        "FROM workspace.movielens.silver_ratings\r\n",
+        "GROUP BY event_month\r\n",
+        "ORDER BY event_month;"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "9b06afa9",
+      "displayName": "Overview",
+      "layout": [
+        {
+          "widget": {
+            "name": "total-ratings",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "689a4b2f",
+                  "fields": [
+                    {
+                      "name": "sum(total_ratings)",
+                      "expression": "SUM(`total_ratings`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Total ratings"
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_ratings)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "distinct-movies-rated",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "689a4b2f",
+                  "fields": [
+                    {
+                      "name": "sum(distinct_movies_rated)",
+                      "expression": "SUM(`distinct_movies_rated`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Distinct movies rated"
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(distinct_movies_rated)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "5bc8b5d4",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "689a4b2f",
+                  "fields": [
+                    {
+                      "name": "sum(distinct_users)",
+                      "expression": "SUM(`distinct_users`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Distinct users"
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(distinct_users)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "f0f35436",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "689a4b2f",
+                  "fields": [
+                    {
+                      "name": "sum(overall_avg_rating)",
+                      "expression": "SUM(`overall_avg_rating`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Overall avg rating"
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(overall_avg_rating)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "genre-avg-rating-over-time",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "16cf1601",
+                  "fields": [
+                    {
+                      "name": "genre",
+                      "expression": "`genre`"
+                    },
+                    {
+                      "name": "monthly(event_month)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `event_month`)"
+                    },
+                    {
+                      "name": "avg_rating",
+                      "expression": "`avg_rating`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Avg rating per genre, over time"
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(event_month)",
+                  "axis": {
+                    "hideGrid": true,
+                    "hideLabels": false,
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg_rating",
+                  "axis": {
+                    "hideTitle": true,
+                    "hideLabels": false,
+                    "hideGrid": false
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "genre",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "total-ratings-by-genre-1",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "10427ef7",
+                  "fields": [
+                    {
+                      "name": "sum(total_ratings)",
+                      "expression": "SUM(`total_ratings`)"
+                    },
+                    {
+                      "name": "genre",
+                      "expression": "`genre`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Total ratings by genre"
+              },
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  }
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(total_ratings)",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Total Ratings",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "genre",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  }
+                },
+                "label": {
+                  "show": false
+                },
+                "extra": [
+                  {
+                    "fieldName": "sum(total_ratings)"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "top-20-trending-movies-latest-month",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "6b7a5296",
+                  "fields": [
+                    {
+                      "name": "rank",
+                      "expression": "`rank`"
+                    },
+                    {
+                      "name": "title",
+                      "expression": "`title`"
+                    },
+                    {
+                      "name": "rating_count",
+                      "expression": "`rating_count`"
+                    },
+                    {
+                      "name": "avg_rating",
+                      "expression": "`avg_rating`"
+                    },
+                    {
+                      "name": "event_month",
+                      "expression": "`event_month`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Top 20 trending movies (latest month)"
+              },
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "rank"
+                  },
+                  {
+                    "fieldName": "title"
+                  },
+                  {
+                    "fieldName": "rating_count"
+                  },
+                  {
+                    "fieldName": "avg_rating"
+                  },
+                  {
+                    "fieldName": "event_month"
+                  }
+                ],
+                "rowOrder": [
+                  {
+                    "by": "column",
+                    "field": {
+                      "index": 0
+                    }
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "ratings-volume-per-month",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "20a0b735",
+                  "fields": [
+                    {
+                      "name": "monthly(event_month)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `event_month`)"
+                    },
+                    {
+                      "name": "ratings_in_month",
+                      "expression": "`ratings_in_month`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Ratings volume per month",
+                "showDescription": true,
+                "description": "This bar will gain a new month when you drop an increment"
+              },
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  }
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(event_month)",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "ratings_in_month",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "genre1",
+            "queries": [
+              {
+                "name": "dashboards/01f16e0d8e811c3182f1882d4b649c00/datasets/01f16e0f0c1c143da5daeb2258d048a8_genre",
+                "query": {
+                  "datasetName": "16cf1601",
+                  "fields": [
+                    {
+                      "name": "genre",
+                      "expression": "`genre`"
+                    },
+                    {
+                      "name": "genre_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Genre"
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "genre",
+                    "queryName": "dashboards/01f16e0d8e811c3182f1882d4b649c00/datasets/01f16e0f0c1c143da5daeb2258d048a8_genre"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#1A242C",
+        "dark": "#1A242C"
+      },
+      "widgetBackgroundColor": {
+        "light": "#12181D",
+        "dark": "#12181D"
+      },
+      "widgetBorderColor": {
+        "light": "#11171C",
+        "dark": "#11171C"
+      },
+      "fontColor": {
+        "light": "#E8ECF0",
+        "dark": "#E8ECF0"
+      },
+      "selectionColor": {
+        "light": "#9877C1",
+        "dark": "#9877C1"
+      },
+      "visualizationColors": [
+        "#0B4B60",
+        "#1A6892",
+        "#4D8CC0",
+        "#9580CE",
+        "#CC90C2",
+        "#EAB0D0",
+        "#F8DAE8"
+      ],
+      "widgetHeaderAlignment": "CENTER",
+      "fontFamily": "Space Grotesk",
+      "widgetPadding": 8,
+      "widgetMargin": 8,
+      "widgetCornerRadius": 4,
+      "widgetShadow": 20,
+      "continuousGradient": {
+        "lightMode": {
+          "fromCategoricalIndex": 0
+        },
+        "darkMode": {
+          "fromCategoricalIndex": 0
+        }
+      },
+      "fontSettings": {
+        "base": {
+          "fontFamily": "Space Grotesk",
+          "fontColor": {
+            "light": "#E8ECF0",
+            "dark": "#E8ECF0"
+          },
+          "fontSize": 14,
+          "fontWeight": 400
+        },
+        "widgetTitle": {
+          "fontSize": 16,
+          "fontWeight": 500
+        },
+        "widgetDescription": {
+          "fontColor": {
+            "dark": "#B8BABD"
+          },
+          "fontSize": 14,
+          "fontWeight": 400
+        },
+        "fieldTitle": {
+          "textCase": "TEXT_CASE_UPPERCASE",
+          "fontColor": {
+            "light": "#D1D4D8",
+            "dark": "#D1D4D8"
+          },
+          "fontSize": 13,
+          "fontWeight": 400
+        },
+        "fieldValue": {
+          "fontColor": {
+            "light": "#D1D4D8",
+            "dark": "#D1D4D8"
+          },
+          "fontSize": 13,
+          "fontWeight": 400
+        }
+      },
+      "gridLineColor": {
+        "light": "#383E42",
+        "dark": "#2C3235"
+      },
+      "axisLineColor": {
+        "light": "#515960",
+        "dark": "#515960"
+      }
+    },
+    "applyModeEnabled": false
+  }
+}

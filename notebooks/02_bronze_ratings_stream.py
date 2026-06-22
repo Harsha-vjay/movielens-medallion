@@ -1,10 +1,10 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # 02 — Bronze: ratings (Auto Loader stream)
+# MAGIC # 02 - Bronze: ratings (Auto Loader stream)
 # MAGIC
-# MAGIC * **Source type**: file stream — Auto Loader (`format("cloudFiles")`) watching
+# MAGIC * **Source type**: file stream - Auto Loader (`format("cloudFiles")`) watching
 # MAGIC   `/Volumes/.../ratings/landing/`.
-# MAGIC * **Trigger**: `availableNow=True` — the stream picks up every file currently
+# MAGIC * **Trigger**: `availableNow=True` - the stream picks up every file currently
 # MAGIC   in the landing directory, processes them in micro-batches, and then **stops**.
 # MAGIC   Perfect for a notebook you re-run by hand on Free Edition.
 # MAGIC * **Checkpoint**: kept inside the Volume so it survives between runs and

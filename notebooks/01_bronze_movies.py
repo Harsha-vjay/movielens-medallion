@@ -1,11 +1,11 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # 01 — Bronze: movies (batch, object source)
+# MAGIC # 01 - Bronze: movies (batch, object source)
 # MAGIC
 # MAGIC * **Source type**: object / batch (one CSV uploaded to a UC Volume).
 # MAGIC * **Read**: single batch `spark.read.csv(...)`.
-# MAGIC * **Write**: managed Delta table `bronze_movies`, **overwrite** with schema overwrite (idempotent — re-running just rewrites the same data).
-# MAGIC * **Schema**: kept as-is from the file (`movieId INT`, `title STRING`, `genres STRING` — pipe-separated).
+# MAGIC * **Write**: managed Delta table `bronze_movies`, **overwrite** with schema overwrite (re-running just rewrites the same data).
+# MAGIC * **Schema**: kept as-is from the file (`movieId INT`, `title STRING`, `genres STRING` - pipe-separated).
 # MAGIC
 # MAGIC No transformations here. Cleaning happens in the silver layer.
 
@@ -85,7 +85,7 @@ df_bronze_movies = (
 # MAGIC %md
 # MAGIC ## Write bronze_movies (overwrite)
 # MAGIC Bronze for the dimension is a deterministic copy of the file, so `overwrite`
-# MAGIC is the right semantics — re-running gives the same table.
+# MAGIC is the right semantics, re-running gives the same table.
 
 # COMMAND ----------
 
